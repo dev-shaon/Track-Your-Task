@@ -219,7 +219,6 @@ class _AddTaskScreenContentState extends State<_AddTaskScreenContent> {
 
               SizedBox(height: 16.h),
 
-              // Reminder - only minutes input
               _card(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -316,8 +315,8 @@ class _AddTaskScreenContentState extends State<_AddTaskScreenContent> {
                         ),
                       ],
                     ),
+
                     SizedBox(height: 8.h),
-                    // Quick select buttons
                     Wrap(
                       spacing: 8.w,
                       children: [5, 10, 15, 30].map((mins) {
