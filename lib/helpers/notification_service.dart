@@ -4,7 +4,47 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:track_your_task/features/add_task/model/task_model.dart';
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+import 'package:vibration/vibration.dart';
+import 'package:get_storage/get_storage.dart';
 import 'dart:typed_data';
+
+/// Top-level callback for AndroidAlarmManager.
+/// Runs in a background isolate — must be a top-level or static function.
+@pragma('vm:entry-point')
+Future<void> alarmCallback(int alarmId) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init();
+
+  final box = GetStorage();
+  final taskTitle = box.read<String>('alarm_$alarmId') ?? 'your task';
+
+  debugPrint('🔔 Alarm fired for: $taskTitle (id: $alarmId)');
+
+  // --- Vibrate the phone ---
+  try {
+    final hasVibrator = await Vibration.hasVibrator() ?? false;
+    if (hasVibrator) {
+      // Vibrate with a pattern: wait 0ms, vibrate 500ms, pause 200ms, vibrate 500ms, pause 200ms, vibrate 500ms
+      Vibration.vibrate(pattern: [0, 500, 200, 500, 200, 500]);
+    }
+  } catch (e) {
+    debugPrint('Vibration error: $e');
+  }
+
+  // --- Speak the task title aloud ---
+  try {
+    final tts = FlutterTts();
+    await tts.setLanguage('en-US');
+    await tts.setSpeechRate(0.45);
+    await tts.setVolume(1.0);
+    await tts.setPitch(1.0);
+    await tts.speak("It's time to $taskTitle");
+  } catch (e) {
+    debugPrint('TTS error: $e');
+  }
+}
 
 @pragma('vm:entry-point')
 void onDidReceiveNotificationResponse(NotificationResponse response) {
@@ -121,35 +161,12 @@ class NotificationService {
   }
 
   Future<void> scheduleTaskReminder(TaskModel task) async {
-    if (task.time.isEmpty || task.reminderMinutes <= 0) return;
+    if (task.time.isEmpty) return;
 
     try {
       if (!_initialized) await init();
       final taskDateTime = _parseTaskDateTime(task);
       if (taskDateTime == null) return;
-
-      final reminderTime = taskDateTime.subtract(
-        Duration(minutes: task.reminderMinutes),
-      );
-
-      if (reminderTime.isBefore(DateTime.now())) {
-        debugPrint('Scheduled time is in the past. Skipping...');
-        return;
-      }
-
-      final notifId = task.id.hashCode.abs() % 2147483647;
-
-      final Int64List vibrationPattern = Int64List.fromList([0, 5000]);
-      final androidDetails = AndroidNotificationDetails(
-        'task_reminder_channel_v2',
-        'Task Reminders',
-        importance: Importance.max,
-        priority: Priority.high,
-        enableVibration: true,
-        vibrationPattern: vibrationPattern,
-      );
-
-      final scheduledTZ = tz.TZDateTime.from(reminderTime, tz.local);
 
       final androidImpl = _plugin
           .resolvePlatformSpecificImplementation<
@@ -169,17 +186,95 @@ class NotificationService {
           ? AndroidScheduleMode.exactAllowWhileIdle
           : AndroidScheduleMode.inexactAllowWhileIdle;
 
-      await _plugin.zonedSchedule(
-        notifId,
-        '⏰ ${task.title}',
-        'Starting in ${task.reminderMinutes} minutes. Be ready! ',
-        scheduledTZ,
-        NotificationDetails(android: androidDetails),
-        androidScheduleMode: scheduleMode,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-      );
-      debugPrint('📅 Scheduled: ${task.title} at $scheduledTZ');
+      final Int64List vibrationPattern = Int64List.fromList([0, 5000]);
+
+      // --- Schedule the reminder notification (X minutes before) ---
+      if (task.reminderMinutes > 0) {
+        final reminderTime = taskDateTime.subtract(
+          Duration(minutes: task.reminderMinutes),
+        );
+
+        if (reminderTime.isAfter(DateTime.now())) {
+          final notifId = task.id.hashCode.abs() % 2147483647;
+
+          final androidDetails = AndroidNotificationDetails(
+            'task_reminder_channel_v2',
+            'Task Reminders',
+            importance: Importance.max,
+            priority: Priority.high,
+            enableVibration: true,
+            vibrationPattern: vibrationPattern,
+          );
+
+          final scheduledTZ = tz.TZDateTime.from(reminderTime, tz.local);
+
+          await _plugin.zonedSchedule(
+            notifId,
+            '⏰ ${task.title}',
+            'Starting in ${task.reminderMinutes} minutes. Be ready! ',
+            scheduledTZ,
+            NotificationDetails(android: androidDetails),
+            androidScheduleMode: scheduleMode,
+            uiLocalNotificationDateInterpretation:
+                UILocalNotificationDateInterpretation.absoluteTime,
+          );
+          debugPrint('📅 Reminder scheduled: ${task.title} at $scheduledTZ');
+        } else {
+          debugPrint('Reminder time is in the past. Skipping reminder...');
+        }
+      }
+
+      // --- Schedule the exact-time notification (at the task time) ---
+      if (taskDateTime.isAfter(DateTime.now())) {
+        final exactNotifId =
+            (task.id + '_exact').hashCode.abs() % 2147483647;
+
+        final exactAndroidDetails = AndroidNotificationDetails(
+          'task_reminder_channel_v2',
+          'Task Reminders',
+          importance: Importance.max,
+          priority: Priority.high,
+          enableVibration: true,
+          vibrationPattern: vibrationPattern,
+        );
+
+        final exactScheduledTZ =
+            tz.TZDateTime.from(taskDateTime, tz.local);
+
+        await _plugin.zonedSchedule(
+          exactNotifId,
+          '🚀 It\'s time to ${task.title}',
+          'Your scheduled task is starting now!',
+          exactScheduledTZ,
+          NotificationDetails(android: exactAndroidDetails),
+          androidScheduleMode: scheduleMode,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime,
+        );
+        debugPrint(
+            '📅 Exact-time notification scheduled: ${task.title} at $exactScheduledTZ');
+
+        // --- Schedule alarm for TTS + Vibration at exact task time ---
+        final alarmId = exactNotifId;
+
+        // Store the task title so the background isolate can read it
+        final box = GetStorage();
+        await box.write('alarm_$alarmId', task.title);
+
+        await AndroidAlarmManager.oneShotAt(
+          taskDateTime,
+          alarmId,
+          alarmCallback,
+          exact: true,
+          wakeup: true,
+          allowWhileIdle: true,
+          rescheduleOnReboot: true,
+        );
+        debugPrint(
+            '🔊 TTS alarm scheduled: "${task.title}" at $taskDateTime');
+      } else {
+        debugPrint('Task time is in the past. Skipping exact-time notification...');
+      }
     } catch (e) {
       debugPrint('❌ Schedule error: $e');
     }
@@ -226,7 +321,16 @@ class NotificationService {
 
   Future<void> cancelTaskReminder(String taskId) async {
     final notifId = taskId.hashCode.abs() % 2147483647;
+    final exactTimeNotifId = (taskId + '_exact').hashCode.abs() % 2147483647;
+
     await _plugin.cancel(notifId);
-    debugPrint('🚫 Cancelled notification for task ID: $taskId');
+    await _plugin.cancel(exactTimeNotifId);
+
+    // Cancel the TTS alarm and clean up stored data
+    await AndroidAlarmManager.cancel(exactTimeNotifId);
+    final box = GetStorage();
+    await box.remove('alarm_$exactTimeNotifId');
+
+    debugPrint('🚫 Cancelled all notifications and alarms for task ID: $taskId');
   }
 }
