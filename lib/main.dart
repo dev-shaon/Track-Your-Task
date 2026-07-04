@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:track_your_task/gen/colors.gen.dart';
 import 'package:track_your_task/helpers/notification_service.dart';
 import 'package:track_your_task/loading.dart';
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'constants/custome_theme.dart';
 import 'helpers/all_routes.dart';
 import 'helpers/di.dart';
@@ -25,6 +26,9 @@ void main() async {
 
   // Notification service initialize
   await NotificationService.instance.init();
+
+  // Initialize AndroidAlarmManager for background TTS + vibration
+  await AndroidAlarmManager.initialize();
 
   if (!kIsWeb) {
     try {
