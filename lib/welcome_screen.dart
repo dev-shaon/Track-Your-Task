@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:track_your_task/common/custom_button.dart';
+import 'package:track_your_task/constants/app_constants.dart';
 import 'package:track_your_task/constants/text_font_style.dart';
 import 'package:track_your_task/gen/assets.gen.dart';
 import 'package:track_your_task/gen/colors.gen.dart';
 import 'package:track_your_task/helpers/all_routes.dart';
+import 'package:track_your_task/helpers/di.dart';
 import 'package:track_your_task/helpers/navigation_service.dart';
 import 'package:track_your_task/helpers/ui_helpers.dart';
 
@@ -54,7 +56,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
                 UIHelper.verticalSpace(100.h),
                 CustomButton(
-                  onTap: () {
+                  onTap: () async {
+                    await appData.write(kKeyIsFirstTime, false);
                     NavigationService.navigateToReplacementUntil(Routes.navberScreen);
                   },
                   btnName: 'Get Started',

@@ -48,13 +48,12 @@ class _LoadingState extends State<Loading> {
       return const SplashScreen();
     } else {
       log("loding screen  else condition>>>>>>>>>>>>><<<<<<<<<<<<<<<<<");
-      return appData.read(kKeyIsLoggedIn)
-          ? const NavberScreen()
-          // ? DemoScreen()
-          // ? CameraScreen()
-          // ? const SelectCapsuleTypeScreen()
-          // : const LoginScreen();
-          : const WelcomeScreen();
+      bool isFirstTime = appData.read(kKeyIsFirstTime) ?? true;
+      if (isFirstTime) {
+        return const WelcomeScreen();
+      } else {
+        return const NavberScreen();
+      }
     }
   }
 }
