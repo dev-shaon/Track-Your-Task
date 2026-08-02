@@ -22,18 +22,15 @@ Future<void> alarmCallback(int alarmId) async {
 
   debugPrint('🔔 Alarm fired for: $taskTitle (id: $alarmId)');
 
-  // --- Vibrate the phone ---
   try {
     final hasVibrator = await Vibration.hasVibrator() ?? false;
     if (hasVibrator) {
-      // Vibrate with a pattern: wait 0ms, vibrate 500ms, pause 200ms, vibrate 500ms, pause 200ms, vibrate 500ms
       Vibration.vibrate(pattern: [0, 500, 200, 500, 200, 500]);
     }
   } catch (e) {
     debugPrint('Vibration error: $e');
   }
 
-  // --- Speak the task title aloud ---
   try {
     final tts = FlutterTts();
     await tts.setLanguage('en-US');
