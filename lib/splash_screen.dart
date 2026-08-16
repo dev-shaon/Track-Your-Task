@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:track_your_task/features/home/presentation/fullscreen.dart';
 import 'package:track_your_task/gen/assets.gen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -43,16 +44,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF013220), Color(0xFF016A3A)],
-          ),
-        ),
+      body: FullScreen(
         child: Center(
           child: FadeTransition(
             opacity: _fadeAnimation,

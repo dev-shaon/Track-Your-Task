@@ -1,4 +1,3 @@
-
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -6,7 +5,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-
 
 import '../constants/app_constants.dart';
 import 'di.dart';
@@ -205,4 +203,3 @@ void rotation() {
     DeviceOrientation.portraitDown,
   ]);
 }
-
