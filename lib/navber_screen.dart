@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:track_your_task/features/add_task/add_task_screen.dart';
 import 'package:track_your_task/features/all_task/presentation/all_task_screen.dart';
 import 'package:track_your_task/features/calendar/presentation/calendar_screen.dart';
+import 'package:track_your_task/features/home/presentation/fullscreen.dart';
 import 'package:track_your_task/features/home/presentation/home_screen.dart';
 import 'package:track_your_task/features/timer/presentation/timer_screen.dart';
 import 'package:track_your_task/gen/assets.gen.dart';
@@ -32,17 +33,27 @@ class _NavberScreenState extends State<NavberScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex],
+      extendBody: true,
+      body: FullScreen(child: _screens[_selectedIndex]),
       floatingActionButton: Container(
         width: 56.w,
         height: 56.h,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.c228B22),
           shape: BoxShape.circle,
-          color: AppColors.c1B5E20,
+          color: AppColors.c228B22,
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.c00FF00.withValues(alpha: 0.2),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: FloatingActionButton(
           backgroundColor: Colors.transparent,
           elevation: 0,
+          highlightElevation: 0,
           onPressed: () async {
             final result = await Navigator.push(
               context,
@@ -52,21 +63,29 @@ class _NavberScreenState extends State<NavberScreen> {
               setState(() {});
             }
           },
-          child: const Icon(Icons.add, color: AppColors.scaffoldColor),
+          child: const Icon(
+            Icons.add,
+            color: AppColors.scaffoldColor,
+            size: 28,
+          ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(bottom: 10.h, right: 10.w, left: 10.w),
+        padding: EdgeInsets.only(bottom: 16.h, right: 16.w, left: 16.w),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.r),
-            color: const Color(0xFF013220),
+            borderRadius: BorderRadius.circular(40.r),
+            color: const Color(0xFF001F14), // Dark sleek background
+            border: Border.all(
+              color: const Color(0xFF00C639).withValues(alpha: 0.2),
+              width: 1,
+            ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.4),
-                blurRadius: 12,
-                offset: const Offset(0, -4),
+                color: Colors.black.withValues(alpha: 0.5),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
               ),
             ],
           ),
@@ -74,15 +93,15 @@ class _NavberScreenState extends State<NavberScreen> {
             color: Colors.transparent,
             elevation: 0,
             shape: const CircularNotchedRectangle(),
-            notchMargin: 8,
+            notchMargin: 10,
             child: SizedBox(
-              height: 65,
+              height: 70.h,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   _navItem(index: 0, svgPath: Assets.icons.homeIcon),
                   _navItem(index: 1, svgPath: Assets.icons.calendarIcon),
-                  const SizedBox(width: 20),
+                  // SizedBox(width: 32.w), // Space for FAB
                   _navItem(index: 2, svgPath: Assets.icons.allTasks),
                   _navItem(index: 3, svgPath: Assets.icons.timerIcon),
                 ],
@@ -98,46 +117,47 @@ class _NavberScreenState extends State<NavberScreen> {
     final bool isSelected = _selectedIndex == index;
     return GestureDetector(
       onTap: () => setState(() => _selectedIndex = index),
+      behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeInOut,
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOutQuint,
+        padding: isSelected
+            ? EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h)
+            : EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14.r),
-          color: isSelected
-              ? const Color(0xFF00FF00).withValues(alpha: 0.15)
-              : Colors.transparent,
-          border: isSelected
-              ? Border.all(
-                  color: const Color(0xFF00FF00).withValues(alpha: 0.5),
-                  width: 1,
+          borderRadius: BorderRadius.circular(30.r),
+          gradient: isSelected
+              ? const LinearGradient(
+                  colors: [Color(0xFF00E640), Color(0xFF008F28)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 )
               : null,
         ),
-        child: Column(
+        child: Row(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(
               svgPath,
-              height: 22,
-              width: 22,
+              height: 24.h,
+              width: 24.w,
               colorFilter: ColorFilter.mode(
-                isSelected ? const Color(0xFF00FF00) : Colors.white54,
+                isSelected ? Colors.white : Colors.white60,
                 BlendMode.srcIn,
               ),
             ),
-            SizedBox(height: 2.h),
-            Text(
-              _screenLabels[index],
-              style: TextStyle(
-                color: isSelected
-                    ? const Color(0xFF00FF00)
-                    : Colors.transparent,
-                fontSize: 9.sp,
-                fontWeight: FontWeight.w600,
+            if (isSelected) ...[
+              SizedBox(width: 8.w),
+              Text(
+                _screenLabels[index],
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.3,
+                ),
               ),
-            ),
+            ],
           ],
         ),
       ),

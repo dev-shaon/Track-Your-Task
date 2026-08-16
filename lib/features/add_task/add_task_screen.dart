@@ -9,6 +9,7 @@ import 'package:track_your_task/features/add_task/model/task_model.dart';
 import 'package:track_your_task/features/add_task/viewmodel/add_task_viewmodel.dart';
 import 'package:track_your_task/features/add_task/viewmodel/task_viewmodel.dart';
 import 'package:track_your_task/features/add_task/widgets/categorys_section.dart';
+import 'package:track_your_task/features/home/presentation/fullscreen.dart';
 import 'package:track_your_task/gen/assets.gen.dart';
 import 'package:track_your_task/gen/colors.gen.dart';
 import 'package:track_your_task/helpers/notification_service.dart';
@@ -170,260 +171,267 @@ class _AddTaskScreenContentState extends State<_AddTaskScreenContent> {
         ),
         centerTitle: true,
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _card(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _label('Title'),
-                    SizedBox(height: 10.h),
-                    _textField(
-                      controller: _titleController,
-                      hint: 'Enter task title',
-                    ),
-                  ],
-                ),
-              ),
-
-              SizedBox(height: 16.h),
-
-              _card(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _label('Set Time & Date'),
-                    SizedBox(height: 10.h),
-                    GestureDetector(
-                      onTap: () => vm.pickDate(context),
-                      child: _infoRow(
-                        icon: Icons.calendar_month,
-                        text: vm.formattedDate,
+      body: FullScreen(
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _card(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _label('Title'),
+                      SizedBox(height: 10.h),
+                      _textField(
+                        controller: _titleController,
+                        hint: 'Enter task title',
                       ),
-                    ),
-                    SizedBox(height: 10.h),
-                    GestureDetector(
-                      onTap: () => vm.pickTime(context),
-                      child: _infoRow(
-                        icon: Icons.access_time,
-                        text: vm.formattedTime(context),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: 16.h),
+
+                _card(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _label('Set Time & Date'),
+                      SizedBox(height: 10.h),
+                      GestureDetector(
+                        onTap: () => vm.pickDate(context),
+                        child: _infoRow(
+                          icon: Icons.calendar_month,
+                          text: vm.formattedDate,
+                        ),
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 10.h),
+                      GestureDetector(
+                        onTap: () => vm.pickTime(context),
+                        child: _infoRow(
+                          icon: Icons.access_time,
+                          text: vm.formattedTime(context),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
 
-              SizedBox(height: 16.h),
+                SizedBox(height: 16.h),
 
-              _card(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.notifications_active,
-                          color: Color(0xFF00FF00),
-                          size: 20,
-                        ),
-                        SizedBox(width: 8.w),
-                        _label('Reminder'),
-                      ],
-                    ),
-                    SizedBox(height: 6.h),
-                    Text(
-                      'How many minutes before the task starts should we notify you?',
-                      style: TextStyle(color: Colors.white54, fontSize: 12.sp),
-                    ),
-                    SizedBox(height: 10.h),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: _reminderMinutesController,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              LengthLimitingTextInputFormatter(3),
-                            ],
-                            style: const TextStyle(
-                              color: Color(0xFF00FF00),
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: '0',
-                              hintStyle: const TextStyle(color: Colors.white30),
-                              filled: true,
-                              fillColor: Colors.white.withValues(alpha: 0.05),
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16.w,
-                                vertical: 12.h,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12.r),
-                                borderSide: const BorderSide(
-                                  color: Color(0xFF00C639),
-                                ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12.r),
-                                borderSide: const BorderSide(
-                                  color: Color(0xFF00C639),
-                                  width: 0.8,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12.r),
-                                borderSide: const BorderSide(
-                                  color: Color(0xFF00FF00),
-                                  width: 1.5,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 12.w),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16.w,
-                            vertical: 14.h,
-                          ),
-                          decoration: BoxDecoration(
-                            color: const Color(
-                              0xFF00FF00,
-                            ).withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(12.r),
-                            border: Border.all(
-                              color: const Color(
-                                0xFF00FF00,
-                              ).withValues(alpha: 0.5),
-                            ),
-                          ),
-                          child: Text(
-                            'minutes',
-                            style: TextStyle(
-                              color: const Color(0xFF00FF00),
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: 8.h),
-                    Wrap(
-                      spacing: 8.w,
-                      children: [5, 10, 15, 30].map((mins) {
-                        return GestureDetector(
-                          onTap: () {
-                            _reminderMinutesController.text = mins.toString();
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 12.w,
-                              vertical: 5.h,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.07),
-                              borderRadius: BorderRadius.circular(20.r),
-                              border: Border.all(color: Colors.white24),
-                            ),
-                            child: Text(
-                              '$mins min',
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 12.sp,
-                              ),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-              ),
-
-              SizedBox(height: 16.h),
-
-              _card(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                _card(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
                         children: [
-                          _label('Category'),
-                          SizedBox(height: 8.h),
-                          GestureDetector(
-                            onTap: () async {
-                              final result = await showModalBottomSheet(
-                                context: context,
-                                backgroundColor: const Color(0xFF013220),
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(20),
+                          const Icon(
+                            Icons.notifications_active,
+                            color: Color(0xFF00FF00),
+                            size: 20,
+                          ),
+                          SizedBox(width: 8.w),
+                          _label('Reminder'),
+                        ],
+                      ),
+                      SizedBox(height: 6.h),
+                      Text(
+                        'How many minutes before the task starts should we notify you?',
+                        style: TextStyle(
+                          color: Colors.white54,
+                          fontSize: 12.sp,
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _reminderMinutesController,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(3),
+                              ],
+                              style: const TextStyle(
+                                color: Color(0xFF00FF00),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: '0',
+                                hintStyle: const TextStyle(
+                                  color: Colors.white30,
+                                ),
+                                filled: true,
+                                fillColor: Colors.white.withValues(alpha: 0.05),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 16.w,
+                                  vertical: 12.h,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  borderSide: const BorderSide(
+                                    color: Color(0xFF00C639),
                                   ),
                                 ),
-                                builder: (_) => const CategorysSection(),
-                              );
-                              if (result != null) vm.setCategory(result);
-                            },
-                            child: Row(
-                              children: [
-                                SvgPicture.asset(
-                                  Assets.icons.topicIcon,
-                                  height: 30.h,
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  borderSide: const BorderSide(
+                                    color: Color(0xFF00C639),
+                                    width: 0.8,
+                                  ),
                                 ),
-                                SizedBox(width: 8.w),
-                                Text(
-                                  vm.selectedCategory ?? 'Select',
-                                  style: TextFontStyle
-                                      .headline15w600cFEFEFEinter
-                                      .copyWith(color: AppColors.c00FF00),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  borderSide: const BorderSide(
+                                    color: Color(0xFF00FF00),
+                                    width: 1.5,
+                                  ),
                                 ),
-                              ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 12.w),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                              vertical: 14.h,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(
+                                0xFF00FF00,
+                              ).withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(12.r),
+                              border: Border.all(
+                                color: const Color(
+                                  0xFF00FF00,
+                                ).withValues(alpha: 0.5),
+                              ),
+                            ),
+                            child: Text(
+                              'minutes',
+                              style: TextStyle(
+                                color: const Color(0xFF00FF00),
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
+
+                      SizedBox(height: 8.h),
+                      Wrap(
+                        spacing: 8.w,
+                        children: [5, 10, 15, 30].map((mins) {
+                          return GestureDetector(
+                            onTap: () {
+                              _reminderMinutesController.text = mins.toString();
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 12.w,
+                                vertical: 5.h,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.07),
+                                borderRadius: BorderRadius.circular(20.r),
+                                border: Border.all(color: Colors.white24),
+                              ),
+                              child: Text(
+                                '$mins min',
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 12.sp,
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
 
-              SizedBox(height: 16.h),
+                SizedBox(height: 16.h),
 
-              _card(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _label('Notes'),
-                    SizedBox(height: 8.h),
-                    _textField(
-                      controller: _notesController,
-                      hint: 'Add notes...',
-                      maxLines: 6,
-                    ),
-                  ],
+                _card(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _label('Category'),
+                            SizedBox(height: 8.h),
+                            GestureDetector(
+                              onTap: () async {
+                                final result = await showModalBottomSheet(
+                                  context: context,
+                                  backgroundColor: const Color(0xFF013220),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20),
+                                    ),
+                                  ),
+                                  builder: (_) => const CategorysSection(),
+                                );
+                                if (result != null) vm.setCategory(result);
+                              },
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    Assets.icons.topicIcon,
+                                    height: 30.h,
+                                  ),
+                                  SizedBox(width: 8.w),
+                                  Text(
+                                    vm.selectedCategory ?? 'Select',
+                                    style: TextFontStyle
+                                        .headline15w600cFEFEFEinter
+                                        .copyWith(color: AppColors.c00FF00),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
 
-              SizedBox(height: 26.h),
+                SizedBox(height: 16.h),
 
-              CustomButton(
-                onTap: () => _saveTask(context),
-                btnName: vm.isEditMode ? 'Update Task' : 'Target Set',
-              ),
+                _card(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _label('Notes'),
+                      SizedBox(height: 8.h),
+                      _textField(
+                        controller: _notesController,
+                        hint: 'Add notes...',
+                        maxLines: 6,
+                      ),
+                    ],
+                  ),
+                ),
 
-              SizedBox(height: 12.h),
-            ],
+                SizedBox(height: 26.h),
+
+                CustomButton(
+                  onTap: () => _saveTask(context),
+                  btnName: vm.isEditMode ? 'Update Task' : 'Target Set',
+                ),
+
+                SizedBox(height: 12.h),
+              ],
+            ),
           ),
         ),
       ),
