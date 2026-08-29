@@ -35,4 +35,4 @@ class CategorysSection extends StatelessWidget {
       ),
     );
   }
-}
+} 

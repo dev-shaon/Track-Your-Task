@@ -35,17 +35,18 @@ class CustomButton extends StatelessWidget {
           gradient: const LinearGradient(
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
-            colors: [
-              Color(0xFF013220), Color(0xFF014D2A)
-            ],
+            colors: [Color(0xFF013220), Color(0xFF014D2A)],
           ),
           borderRadius: BorderRadius.circular(borderRadius ?? 22.r),
         ),
         child: FittedBox(
           child: Text(
             btnName,
-            style: textStyle ??
-                TextFontStyle.headline18w700c3D3D3Dinter.copyWith(color: AppColors.scaffoldColor),
+            style:
+                textStyle ??
+                TextFontStyle.headline18w700c3D3D3Dinter.copyWith(
+                  color: AppColors.scaffoldColor,
+                ),
           ),
         ),
       ),

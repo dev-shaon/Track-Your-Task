@@ -89,12 +89,12 @@ class _HomeScreenContent extends StatelessWidget {
                             gradient: LinearGradient(
                               colors: isSelected
                                   ? [
-                                      const Color(0xFF00C639),
-                                      const Color(0xFF1B5E20),
+                                      AppColors.c05A981,
+                                      AppColors.c05A981.withValues(alpha: 0.4),
                                     ]
                                   : [
                                       const Color(0xFF013220),
-                                      const Color(0xFF016A3A),
+                                      AppColors.c05A981.withValues(alpha: 0.5),
                                     ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
@@ -102,7 +102,7 @@ class _HomeScreenContent extends StatelessWidget {
                             borderRadius: BorderRadius.circular(15.r),
                             border: isSelected
                                 ? Border.all(
-                                    color: const Color(0xFF00FF00),
+                                    color: AppColors.c05A981,
                                     width: 1.5,
                                   )
                                 : null,
@@ -160,13 +160,13 @@ class _HomeScreenContent extends StatelessWidget {
                             vertical: 4.h,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white12,
+                            color: AppColors.c05A981.withValues(alpha: 2),
                             borderRadius: BorderRadius.circular(20.r),
                           ),
                           child: Text(
                             'Show All',
                             style: TextStyle(
-                              color: AppColors.c00FF00,
+                              color: AppColors.c00BFFF,
                               fontSize: 12.sp,
                             ),
                           ),
