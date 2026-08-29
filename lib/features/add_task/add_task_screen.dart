@@ -274,20 +274,20 @@ class _AddTaskScreenContentState extends State<_AddTaskScreenContent> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12.r),
                                   borderSide: const BorderSide(
-                                    color: Color(0xFF00C639),
+                                    color: AppColors.c05A981,
                                   ),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12.r),
                                   borderSide: const BorderSide(
-                                    color: Color(0xFF00C639),
+                                    color: AppColors.c05A981,
                                     width: 0.8,
                                   ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12.r),
                                   borderSide: const BorderSide(
-                                    color: Color(0xFF00FF00),
+                                    color: AppColors.c05A981,
                                     width: 1.5,
                                   ),
                                 ),
@@ -301,20 +301,16 @@ class _AddTaskScreenContentState extends State<_AddTaskScreenContent> {
                               vertical: 14.h,
                             ),
                             decoration: BoxDecoration(
-                              color: const Color(
-                                0xFF00FF00,
-                              ).withValues(alpha: 0.15),
+                              color: AppColors.c05A981.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(12.r),
                               border: Border.all(
-                                color: const Color(
-                                  0xFF00FF00,
-                                ).withValues(alpha: 0.5),
+                                color: AppColors.c05A981.withValues(alpha: 0.5),
                               ),
                             ),
                             child: Text(
                               'minutes',
                               style: TextStyle(
-                                color: const Color(0xFF00FF00),
+                                color: AppColors.c05A981,
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -393,7 +389,7 @@ class _AddTaskScreenContentState extends State<_AddTaskScreenContent> {
                                     vm.selectedCategory ?? 'Select',
                                     style: TextFontStyle
                                         .headline15w600cFEFEFEinter
-                                        .copyWith(color: AppColors.c00FF00),
+                                        .copyWith(color: AppColors.c05A981),
                                   ),
                                 ],
                               ),
@@ -442,7 +438,7 @@ class _AddTaskScreenContentState extends State<_AddTaskScreenContent> {
     return Container(
       padding: EdgeInsets.all(20.r),
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.c00C639),
+        border: Border.all(color: AppColors.c05A981),
         borderRadius: BorderRadius.circular(20.r),
         gradient: const LinearGradient(
           colors: [Color(0xFF013220), Color(0xFF014D2A)],
@@ -487,15 +483,15 @@ class _AddTaskScreenContentState extends State<_AddTaskScreenContent> {
         contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.r),
-          borderSide: const BorderSide(color: Color(0xFF00C639)),
+          borderSide: const BorderSide(color: AppColors.c05A981),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.r),
-          borderSide: const BorderSide(color: Color(0xFF00C639), width: 0.8),
+          borderSide: const BorderSide(color: AppColors.c05A981, width: 0.8),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.r),
-          borderSide: const BorderSide(color: Color(0xFF00FF00), width: 1.2),
+          borderSide: const BorderSide(color: AppColors.c05A981, width: 1.2),
         ),
       ),
     );
@@ -505,7 +501,7 @@ class _AddTaskScreenContentState extends State<_AddTaskScreenContent> {
     return Container(
       padding: EdgeInsets.all(14.r),
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.c00C639),
+        border: Border.all(color: AppColors.c05A981),
         borderRadius: BorderRadius.circular(14.r),
         gradient: const LinearGradient(
           colors: [Color(0xFF014D2A), Color(0xFF013220)],
@@ -513,11 +509,11 @@ class _AddTaskScreenContentState extends State<_AddTaskScreenContent> {
       ),
       child: Row(
         children: [
-          Icon(icon, color: const Color(0xFF00C853)),
+          Icon(icon, color: AppColors.c05A981),
           SizedBox(width: 12.w),
           Text(
             text,
-            style: TextStyle(color: AppColors.c00FF00, fontSize: 14.sp),
+            style: TextStyle(color: AppColors.c05A981, fontSize: 14.sp),
           ),
         ],
       ),

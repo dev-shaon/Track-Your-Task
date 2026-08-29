@@ -168,7 +168,7 @@ class _TimerScreenContent extends StatelessWidget {
                   ),
                   margin: EdgeInsets.symmetric(horizontal: 40.w),
                   decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.c00C639),
+                    border: Border.all(color: AppColors.c05A981),
                     gradient: const LinearGradient(
                       colors: [Color(0xFF013220), Color(0xFF014D2A)],
                     ),

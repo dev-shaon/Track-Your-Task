@@ -4,10 +4,7 @@ import 'package:track_your_task/gen/assets.gen.dart';
 class FullScreen extends StatelessWidget {
   final Widget child;
 
-  const FullScreen({
-    super.key,
-    required this.child,
-  });
+  const FullScreen({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

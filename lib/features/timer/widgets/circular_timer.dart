@@ -6,22 +6,17 @@ class CircularTimer extends StatelessWidget {
   final double progress; // 0.0 to 1.0
   final String time;
 
-  const CircularTimer({
-    super.key,
-    required this.progress,
-    required this.time,
-  });
+  const CircularTimer({super.key, required this.progress, required this.time});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 300,
       height: 300,
-      decoration:  BoxDecoration(
+      decoration: BoxDecoration(
         color: Color(0xFF002117), // ডার্ক গ্রিন ব্যাকগ্রাউন্ড
         shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.c1B5E20),
-
+        border: Border.all(color: AppColors.c1B5E20),
       ),
       child: CustomPaint(
         painter: TimerPainter(progress),
@@ -68,7 +63,7 @@ class TimerPainter extends CustomPainter {
       final angle = (i * 30) * pi / 180 - pi / 2;
       final isCardinal = i % 3 == 0;
       final tickLength = isCardinal ? 15.0 : 8.0;
-      
+
       // টিকগুলোর অবস্থান মাঝের দিকে (Ring থেকে দূরে)
       final start = Offset(
         center.dx + (ringRadius - 35) * cos(angle),
@@ -83,7 +78,8 @@ class TimerPainter extends CustomPainter {
 
     // ৩. প্রগ্রেস আর্ক (সবুজ অংশ)
     final progressPaint = Paint()
-      ..color = const Color(0xFF00C853) // ইমেজের মতো ভাইব্রেন্ট গ্রিন
+      ..color =
+          const Color(0xFF00C853) // ইমেজের মতো ভাইব্রেন্ট গ্রিন
       ..strokeWidth = 14.0
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
@@ -109,6 +105,6 @@ class TimerPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant TimerPainter oldDelegate) => 
+  bool shouldRepaint(covariant TimerPainter oldDelegate) =>
       oldDelegate.progress != progress;
 }

@@ -18,9 +18,9 @@ Future<void> alarmCallback(int alarmId) async {
   await GetStorage.init();
 
   final box = GetStorage();
-  final taskTitle = box.read<String>('alarm_$alarmId') ?? 'your task';
+  final storedText = box.read<String>('alarm_$alarmId') ?? 'your task';
 
-  debugPrint('🔔 Alarm fired for: $taskTitle (id: $alarmId)');
+  debugPrint('🔔 Alarm fired for: $storedText (id: $alarmId)');
 
   try {
     final hasVibrator = await Vibration.hasVibrator() ?? false;
@@ -37,7 +37,16 @@ Future<void> alarmCallback(int alarmId) async {
     await tts.setSpeechRate(0.45);
     await tts.setVolume(1.0);
     await tts.setPitch(1.0);
-    await tts.speak("It's time to $taskTitle");
+    await tts.awaitSpeakCompletion(true);
+
+    String announcement;
+    if (storedText.contains("time to") || storedText.contains("starting in")) {
+      announcement = storedText;
+    } else {
+      announcement = "It's time to $storedText";
+    }
+
+    await tts.speak(announcement);
   } catch (e) {
     debugPrint('TTS error: $e');
   }
@@ -216,6 +225,27 @@ class NotificationService {
                 UILocalNotificationDateInterpretation.absoluteTime,
           );
           debugPrint('📅 Reminder scheduled: ${task.title} at $scheduledTZ');
+
+          // --- Schedule alarm for TTS + Vibration at reminder time ---
+          final reminderAlarmId = notifId;
+          final box = GetStorage();
+          await box.write(
+            'alarm_$reminderAlarmId',
+            'Reminder: ${task.title} is starting in ${task.reminderMinutes} minutes',
+          );
+
+          await AndroidAlarmManager.oneShotAt(
+            reminderTime,
+            reminderAlarmId,
+            alarmCallback,
+            exact: true,
+            wakeup: true,
+            allowWhileIdle: true,
+            rescheduleOnReboot: true,
+          );
+          debugPrint(
+            '🔊 TTS reminder alarm scheduled: "${task.title}" at $reminderTime',
+          );
         } else {
           debugPrint('Reminder time is in the past. Skipping reminder...');
         }
@@ -223,8 +253,7 @@ class NotificationService {
 
       // --- Schedule the exact-time notification (at the task time) ---
       if (taskDateTime.isAfter(DateTime.now())) {
-        final exactNotifId =
-            (task.id + '_exact').hashCode.abs() % 2147483647;
+        final exactNotifId = (task.id + '_exact').hashCode.abs() % 2147483647;
 
         final exactAndroidDetails = AndroidNotificationDetails(
           'task_reminder_channel_v2',
@@ -235,8 +264,7 @@ class NotificationService {
           vibrationPattern: vibrationPattern,
         );
 
-        final exactScheduledTZ =
-            tz.TZDateTime.from(taskDateTime, tz.local);
+        final exactScheduledTZ = tz.TZDateTime.from(taskDateTime, tz.local);
 
         await _plugin.zonedSchedule(
           exactNotifId,
@@ -249,7 +277,8 @@ class NotificationService {
               UILocalNotificationDateInterpretation.absoluteTime,
         );
         debugPrint(
-            '📅 Exact-time notification scheduled: ${task.title} at $exactScheduledTZ');
+          '📅 Exact-time notification scheduled: ${task.title} at $exactScheduledTZ',
+        );
 
         // --- Schedule alarm for TTS + Vibration at exact task time ---
         final alarmId = exactNotifId;
@@ -267,10 +296,11 @@ class NotificationService {
           allowWhileIdle: true,
           rescheduleOnReboot: true,
         );
-        debugPrint(
-            '🔊 TTS alarm scheduled: "${task.title}" at $taskDateTime');
+        debugPrint('🔊 TTS alarm scheduled: "${task.title}" at $taskDateTime');
       } else {
-        debugPrint('Task time is in the past. Skipping exact-time notification...');
+        debugPrint(
+          'Task time is in the past. Skipping exact-time notification...',
+        );
       }
     } catch (e) {
       debugPrint('❌ Schedule error: $e');
@@ -323,11 +353,15 @@ class NotificationService {
     await _plugin.cancel(notifId);
     await _plugin.cancel(exactTimeNotifId);
 
-    // Cancel the TTS alarm and clean up stored data
     await AndroidAlarmManager.cancel(exactTimeNotifId);
+    await AndroidAlarmManager.cancel(notifId);
+
     final box = GetStorage();
     await box.remove('alarm_$exactTimeNotifId');
+    await box.remove('alarm_$notifId');
 
-    debugPrint('🚫 Cancelled all notifications and alarms for task ID: $taskId');
+    debugPrint(
+      '🚫 Cancelled all notifications and alarms for task ID: $taskId',
+    );
   }
 }

@@ -39,16 +39,9 @@ class _NavberScreenState extends State<NavberScreen> {
         width: 56.w,
         height: 56.h,
         decoration: BoxDecoration(
-          border: Border.all(color: AppColors.c228B22),
+          border: Border.all(color: AppColors.c05A981),
           shape: BoxShape.circle,
-          color: AppColors.c228B22,
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.c00FF00.withValues(alpha: 0.2),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          color: AppColors.c05A981,
         ),
         child: FloatingActionButton(
           backgroundColor: Colors.transparent,
@@ -70,15 +63,15 @@ class _NavberScreenState extends State<NavberScreen> {
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: Padding(
         padding: EdgeInsets.only(bottom: 16.h, right: 16.w, left: 16.w),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(40.r),
-            color: const Color(0xFF001F14), // Dark sleek background
+            color: const Color(0xFF001F14),
             border: Border.all(
-              color: const Color(0xFF00C639).withValues(alpha: 0.2),
+              color: AppColors.c05A981.withValues(alpha: 0.2),
               width: 1,
             ),
             boxShadow: [
@@ -126,13 +119,7 @@ class _NavberScreenState extends State<NavberScreen> {
             : EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30.r),
-          gradient: isSelected
-              ? const LinearGradient(
-                  colors: [Color(0xFF00E640), Color(0xFF008F28)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                )
-              : null,
+          color: isSelected ? AppColors.c05A981 : null,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

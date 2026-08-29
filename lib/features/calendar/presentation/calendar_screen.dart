@@ -6,6 +6,7 @@ import 'package:track_your_task/features/add_task/model/task_model.dart';
 import 'package:track_your_task/features/calendar/viewmodel/calendar_viewmodel.dart';
 import 'package:track_your_task/common/task_details_bottom_sheet.dart';
 import 'package:track_your_task/features/home/presentation/fullscreen.dart';
+import 'package:track_your_task/gen/colors.gen.dart';
 import 'package:track_your_task/helpers/ui_helpers.dart';
 
 class CalendarScreen extends StatelessWidget {
@@ -80,7 +81,6 @@ class _CalendarScreenContent extends StatelessWidget {
                       selectedDayPredicate: vm.isSelectedDay,
                       onDaySelected: vm.onDaySelected,
                       calendarBuilders: CalendarBuilders(
-                        // Task আছে এমন দিনে dot দেখাবে
                         markerBuilder: (context, day, events) {
                           if (vm.hasTaskOnDay(day)) {
                             return Positioned(
@@ -90,7 +90,7 @@ class _CalendarScreenContent extends StatelessWidget {
                                 height: 6,
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: Color(0xFF00FF00),
+                                  color: AppColors.c05A981,
                                 ),
                               ),
                             );
@@ -101,25 +101,23 @@ class _CalendarScreenContent extends StatelessWidget {
                       calendarStyle: CalendarStyle(
                         todayDecoration: BoxDecoration(
                           gradient: const LinearGradient(
-                            colors: [Color(0xFF00C639), Color(0xFF1B5E20)],
+                            colors: [AppColors.c05A981, Color(0xFF1B5E20)],
                           ),
                           shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(
-                                0xFF00FF00,
-                              ).withValues(alpha: 0.3),
-                              blurRadius: 8,
-                            ),
-                          ],
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: const Color(
+                          //       0xFF00FF00,
+                          //     ).withValues(alpha: 0.3),
+                          //     blurRadius: 8,
+                          //   ),
+                          // ],
                         ),
                         selectedDecoration: BoxDecoration(
-                          color: const Color(
-                            0xFF00FF00,
-                          ).withValues(alpha: 0.25),
+                          color: AppColors.c05A981.withValues(alpha: 0.25),
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: const Color(0xFF00FF00),
+                            color: AppColors.c05A981,
                             width: 1.5,
                           ),
                         ),
@@ -146,7 +144,7 @@ class _CalendarScreenContent extends StatelessWidget {
                           fontSize: 13,
                         ),
                         selectedTextStyle: const TextStyle(
-                          color: Color(0xFF00FF00),
+                          color: AppColors.c05A981,
                           fontWeight: FontWeight.bold,
                         ),
                         cellMargin: const EdgeInsets.all(4),
@@ -163,28 +161,24 @@ class _CalendarScreenContent extends StatelessWidget {
                         leftChevronIcon: Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: const Color(
-                              0xFF00FF00,
-                            ).withValues(alpha: 0.15),
+                            color: AppColors.c05A981.withValues(alpha: 0.15),
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(
                             Icons.chevron_left,
-                            color: Color(0xFF00FF00),
+                            color: AppColors.c05A981,
                             size: 20,
                           ),
                         ),
                         rightChevronIcon: Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: const Color(
-                              0xFF00FF00,
-                            ).withValues(alpha: 0.15),
+                            color: AppColors.c05A981.withValues(alpha: 0.15),
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(
                             Icons.chevron_right,
-                            color: Color(0xFF00FF00),
+                            color: AppColors.c05A981,
                             size: 20,
                           ),
                         ),
@@ -193,9 +187,7 @@ class _CalendarScreenContent extends StatelessWidget {
                           vertical: 14.h,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(
-                            0xFF00C639,
-                          ).withValues(alpha: 0.08),
+                          color: AppColors.c05A981.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(24.r),
                             topRight: Radius.circular(24.r),
@@ -255,7 +247,7 @@ class _CalendarScreenContent extends StatelessWidget {
                                 children: [
                                   const Icon(
                                     Icons.task_alt,
-                                    color: Color(0xFF00FF00),
+                                    color: AppColors.c05A981,
                                     size: 18,
                                   ),
                                   SizedBox(width: 8.w),
@@ -323,7 +315,7 @@ class _TaskCard extends StatelessWidget {
           ),
           border: Border.all(
             color: task.isCompleted
-                ? const Color(0xFF00FF00).withValues(alpha: 0.5)
+                ? AppColors.c05A981.withValues(alpha: 0.5)
                 : const Color(0xFF00C639).withValues(alpha: 0.3),
             width: 0.8,
           ),
@@ -334,9 +326,7 @@ class _TaskCard extends StatelessWidget {
               width: 4.w,
               height: 40.h,
               decoration: BoxDecoration(
-                color: task.isCompleted
-                    ? const Color(0xFF00FF00)
-                    : const Color(0xFF00C639),
+                color: task.isCompleted ? AppColors.c05A981 : AppColors.c05A981,
                 borderRadius: BorderRadius.circular(4.r),
               ),
             ),
@@ -378,7 +368,7 @@ class _TaskCard extends StatelessWidget {
                           SizedBox(width: 8.w),
                           const Icon(
                             Icons.notifications,
-                            color: Color(0xFF00C639),
+                            color: AppColors.c05A981,
                             size: 12,
                           ),
                           SizedBox(width: 4.w),
