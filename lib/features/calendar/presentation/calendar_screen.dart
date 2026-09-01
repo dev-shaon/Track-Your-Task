@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:track_your_task/constants/color.dart';
 import 'package:track_your_task/features/add_task/model/task_model.dart';
 import 'package:track_your_task/features/calendar/viewmodel/calendar_viewmodel.dart';
 import 'package:track_your_task/common/task_details_bottom_sheet.dart';
@@ -57,7 +58,7 @@ class _CalendarScreenContent extends StatelessWidget {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF00FF00).withValues(alpha: 0.08),
+                        color: AppColors.c05A981.withValues(alpha: 0.08),
                         blurRadius: 20,
                         offset: const Offset(0, 6),
                       ),
@@ -68,7 +69,7 @@ class _CalendarScreenContent extends StatelessWidget {
                       ),
                     ],
                     border: Border.all(
-                      color: const Color(0xFF00C639).withValues(alpha: 0.3),
+                      color: AppColors.c05A981.withValues(alpha: 0.3),
                       width: 1,
                     ),
                   ),
