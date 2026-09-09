@@ -85,6 +85,8 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
+    - assets/images/logo_p1.png
+    - assets/images/logo_p2.png
     - assets/fonts/
     - assets/colors/
     - assets/lottie/

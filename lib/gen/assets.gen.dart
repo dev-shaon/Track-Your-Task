@@ -118,6 +118,12 @@ class $AssetsImagesGen {
   AssetGenImage get appLogo =>
       const AssetGenImage('assets/images/app_logo.png');
 
+  /// File path: assets/images/logo_p1.png
+  AssetGenImage get logoP1 => const AssetGenImage('assets/images/logo_p1.png');
+
+  /// File path: assets/images/logo_p2.png
+  AssetGenImage get logoP2 => const AssetGenImage('assets/images/logo_p2.png');
+
   /// File path: assets/images/splash_screen.png
   AssetGenImage get splashScreen =>
       const AssetGenImage('assets/images/splash_screen.png');
@@ -126,7 +132,13 @@ class $AssetsImagesGen {
   AssetGenImage get welcome => const AssetGenImage('assets/images/welcome.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [appLogo, splashScreen, welcome];
+  List<AssetGenImage> get values => [
+    appLogo,
+    logoP1,
+    logoP2,
+    splashScreen,
+    welcome,
+  ];
 }
 
 class $AssetsLottieGen {
